@@ -3,51 +3,43 @@ import jwt from "jsonwebtoken";
 import userModel from "../models/userModel.js";
 import transporter from "../config/nodemailer.js";
 
-export const register = async (req, res) => {
-    const {name, email, password} = req.body;
-
-    if(!name || !email || !password) {
-        return res.json({success: false, message: "Missing Details"});
-    }
-
+//when admin creates a user
+export const createUser = async (req, res) => {
     try {
+        const { name, email, password, role } = req.body;
 
-        const existingUser = await userModel.findOne({email});
-
-        if(existingUser){
-            return res.json({success: false, message: "User already exists!"});
+        // Check if email already exists
+        const existingUser = await userModel.findOne({ email });
+        if (existingUser) {
+            return res.json({success: false, message: "Email already in use"});
         }
 
+        // If role is admin, check if one already exists
+        if (role === "admin") {
+            const existingAdmin = await userModel.findOne({ role: "admin" });
+            if (existingAdmin) {
+                return res.status(400).json({ message: "An admin account already exists" });
+            }
+        }
+
+        // Hash password before saving
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const user = new userModel({name, email, password: hashedPassword});
-        await user.save();
-        
-        const token = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '7d'});
-
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
-            maxAge: 7 * 24 * 60 * 60 * 1000
+        // Create user
+        const newUser = new userModel({
+            name,
+            email,
+            password: hashedPassword,
+            role
         });
 
-        //Sending welcome email
-        const mailOptions = {
-            from: process.env.SENDER_EMAIL,
-            to: email,
-            subject: 'Welcome to EvaluTech',
-            text: `Welcome to EvaluTech. Your account has been created with email id: ${email}`
-        }
+        await newUser.save();
 
-        await transporter.sendMail(mailOptions);
-
-        return res.json({success: true});
-
+        return res.json({success: true, message: "User successfully created!"});
     } catch (error) {
-       res.json({success: false, message: error.message}) 
+        return res.json({success: false, message: error.message});
     }
-}
+};
 
 export const login = async(req, res) => {
     const {email, password } = req.body;
@@ -69,13 +61,13 @@ export const login = async(req, res) => {
             return res.json ({success: false, message: "Invalid password"});
         }
 
-        const token = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '7d'});
+        const token = jwt.sign({id: user._id, role: user.role}, process.env.JWT_SECRET, {expiresIn: '7d'});
 
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
-            maxAge: 7 * 24 * 60 * 60 * 1000
+        return res.json({
+        success: true,
+        message: "Login successful",
+        token,
+        user: { name: user.name, email: user.email, role: user.role, isAccountVerified: user.isAccountVerified },
         });
 
         return res.json({success: true}); 
