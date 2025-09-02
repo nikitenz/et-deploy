@@ -152,7 +152,22 @@ export const verifyEmail = async (req, res)=> {
         user.verifyOtpExpireAt = 0;
 
         await user.save();
-        return res.json({success: true, message: 'Email verified successfully'});
+
+        const token = jwt.sign(
+            { id: user._id, role: user.role  },
+            process.env.JWT_SECRET,
+            { expiresIn: '7d'}
+        );
+
+        return res.json({success: true, message: 'Email verified successfully', token,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                isAccountVerified: user.isAccountVerified,
+                role: user.role,
+            }
+        });
         
     } catch (error) {
          res.json({success: false, message: error.message});

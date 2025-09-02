@@ -7,13 +7,13 @@ import { useContext } from "react";
 
 export function SiteHeader() {
 
-  const { role } = useContext(AppContent);
+  const { userData } = useContext(AppContent);
 
   const roleLabels = {
-    admin: "admin",
-    faculty: "faculty",
-    hte: "hte",
-    student: "student",
+    admin: "Admin",
+    faculty: "Faculty",
+    hte: "HTE",
+    student: "Student",
   }
 
   return (
@@ -22,7 +22,7 @@ export function SiteHeader() {
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
         <SidebarTrigger className="-ml-1" />
         <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-4" />
-        <h1 className="text-base font-medium"> {roleLabels[role]} Dashboard</h1>
+        <h1 className="text-base font-medium"> {roleLabels[userData?.role?.toLowerCase()] ?? "Guest"} Dashboard</h1>
         <div className="ml-auto flex items-center gap-2">
           <Button variant="ghost" asChild size="sm" className="hidden sm:flex">
             <a

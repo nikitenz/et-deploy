@@ -1,5 +1,6 @@
 import * as React from "react"
 import {
+  IconBell,
   IconCamera,
   IconChartBar,
   IconDashboard,
@@ -12,8 +13,10 @@ import {
   IconInnerShadowTop,
   IconListDetails,
   IconReport,
+  IconRotate,
   IconSearch,
   IconSettings,
+  IconSpiral,
   IconUsers,
 } from "@tabler/icons-react"
 
@@ -33,8 +36,8 @@ import {
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "System Admin",
+    email: "evalutechdev@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
@@ -44,24 +47,29 @@ const data = {
       icon: IconDashboard,
     },
     {
-      title: "Lifecycle",
+      title: "Assessment Forms",
       url: "#",
       icon: IconListDetails,
     },
     {
-      title: "Analytics",
+      title: "User Management",
       url: "#",
       icon: IconChartBar,
     },
     {
-      title: "Projects",
+      title: "Student Groups",
       url: "#",
       icon: IconFolder,
     },
     {
-      title: "Team",
+      title: "HTE Management",
       url: "#",
       icon: IconUsers,
+    },
+    {
+      title: "Notifications",
+      url: "#",
+      icon: IconBell,
     },
   ],
   navClouds: [
@@ -131,19 +139,14 @@ const data = {
   ],
   documents: [
     {
-      name: "Data Library",
-      url: "#",
-      icon: IconDatabase,
-    },
-    {
       name: "Reports",
       url: "#",
       icon: IconReport,
     },
     {
-      name: "Word Assistant",
+      name: "Backup",
       url: "#",
-      icon: IconFileWord,
+      icon: IconRotate,
     },
   ],
 }
@@ -164,15 +167,13 @@ export function AppSidebar({
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
+              <NavUser user={data.user} />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
         <NavDocuments items={data.documents} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
-      </SidebarFooter>
     </Sidebar>
   );
 }

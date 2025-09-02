@@ -4,11 +4,13 @@ import dotenv from "dotenv";
 import userModel from "../models/userModel.js";
 import transporter from "../config/nodemailer.js";
 
-dotenv.config();
+dotenv.config({path: "../.env"});
 
 const seedAdmin = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
+    await mongoose.connect(process.env.MONGODB_URI, {
+      dbName: "evalutech",
+    });
 
     const existingAdmin = await userModel.findOne({ role: "admin" });
     if (existingAdmin) {
