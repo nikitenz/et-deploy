@@ -5,10 +5,13 @@ import { SectionCards } from "@/components/section-cards";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
+import { AppContextProvider } from "../../../context/AppContext";
+
 // import data from "./data.json";
 
 export default function AdminDashboard() {
   return (
+    <AppContextProvider>
     <SidebarProvider
       style={{
         "--sidebar-width": "calc(var(--spacing) * 72)",
@@ -31,5 +34,6 @@ export default function AdminDashboard() {
         </div>
       </SidebarInset>
     </SidebarProvider>
+    </AppContextProvider>
   );
 }

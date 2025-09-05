@@ -4,6 +4,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar"
 
 import AppContent from "../../context/AppContext.jsx";
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function SiteHeader() {
 
@@ -16,6 +17,8 @@ export function SiteHeader() {
     student: "Student",
   }
 
+  const navigate = useNavigate();
+
   return (
     <header
       className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
@@ -24,15 +27,11 @@ export function SiteHeader() {
         <Separator orientation="vertical" className="mx-2 data-[orientation=vertical]:h-4" />
         <h1 className="text-base font-medium"> {roleLabels[userData?.role?.toLowerCase()] ?? "Guest"} Dashboard</h1>
         <div className="ml-auto flex items-center gap-2">
-          <Button variant="ghost" asChild size="sm" className="hidden sm:flex">
-            <a
-              href="https://github.com/shadcn-ui/ui/tree/main/apps/v4/app/(examples)/dashboard"
-              rel="noopener noreferrer"
-              target="_blank"
-              className="dark:text-foreground">
-              GitHub
-            </a>
+          {!userData?.isAccountVerified && (
+          <Button variant="ghost" asChild size="sm" className="hidden sm:flex" onClick={() => navigate("/verify-email")}>
+              Verify Email
           </Button>
+          )}
         </div>
       </div>
     </header>
