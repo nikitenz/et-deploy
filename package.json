@@ -3,5 +3,25 @@
     "@hookform/resolvers": "^5.2.1",
     "multer": "^2.0.2",
     "zod": "^4.1.5"
-  }
+  },
+  "name": "evalutech-dev",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "npm run start --prefix backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikitenz/evalutech.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nikitenz/evalutech/issues"
+  },
+  "homepage": "https://github.com/nikitenz/evalutech#readme",
+  "description": ""
 }
